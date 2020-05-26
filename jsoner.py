@@ -190,8 +190,10 @@ jeson_valid = {
 }
 
 
-def json_messager():
-    random_event = random.randint(1, 1)
+def json_messager() -> dict:
+    """Тестовая функция для проверки поведения , если
+    JSON невалидный"""
+    random_event = random.randint(1, 2)
     if random_event == 1:
         jeson_valid = {
             "id": random_int,
@@ -235,6 +237,7 @@ def json_messager():
 
 
 def validator(json, schema: dict = SCHEMA) -> dict:
+    """Валидатор JSON."""
     try:
         validate(json, schema)
         print('Zbs Krasavchik')
@@ -243,9 +246,9 @@ def validator(json, schema: dict = SCHEMA) -> dict:
         print('Govno')
 
 
-
-
-def handler(json):
+def handler(json: dict ) -> list:
+    """Обработчик входящих JSON, возвращается список
+    но хотелось бы n отедльных словарей с разными location и amount."""
     print(json)
     example_dict = []
     for key in json:
@@ -263,8 +266,6 @@ def handler(json):
 
         elif key != "package_params":
             example_dict.append(a)
-
-
     return example_dict
 
 
