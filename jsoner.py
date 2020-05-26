@@ -193,7 +193,7 @@ jeson_valid = {
 def json_messager() -> dict:
     """Тестовая функция для проверки поведения , если
     JSON невалидный"""
-    random_event = random.randint(1, 2)
+    random_event = random.randint(1, 1)
     if random_event == 1:
         jeson_valid = {
             "id": random_int,
@@ -209,6 +209,10 @@ def json_messager() -> dict:
                 },
                 {
                     "location": "Магазин в центре",
+                    "amount": random.randint(0, 10)
+                },
+                {
+                    "location": "Магазин в Далеке",
                     "amount": random.randint(0, 10)
                 }
             ]
@@ -243,14 +247,18 @@ def validator(json, schema: dict = SCHEMA) -> dict:
         print('Zbs Krasavchik')
         return json
     except jsonschema.exceptions.ValidationError:
-        print('Govno')
+        print('Невалидная JSON')
+        quit()
 
 
-def handler(json: dict ) -> list:
+def handler(json: dict) -> list:
     """Обработчик входящих JSON, возвращается список
     но хотелось бы n отедльных словарей с разными location и amount."""
+    print('Исходная JSON')
     print(json)
+    final_dict = []
     example_dict = []
+
     for key in json:
         a = key, json[key]
         if isinstance(json[key], dict):
@@ -260,13 +268,26 @@ def handler(json: dict ) -> list:
 
         if isinstance(json[key], list):
             for list_key in json[key]:
+                counter = 0
+                d = example_dict[::]
                 for inner_list_key in list_key:
-                        c = inner_list_key , list_key[inner_list_key]
-                        example_dict.append(c)
+                    c = inner_list_key, list_key[inner_list_key]
+                    d.append(c)
+                    counter += 1
+                    if counter % 2 == 0:
+                        final_dict.append(d)
 
         elif key != "package_params":
             example_dict.append(a)
-    return example_dict
+
+    for i in range(len(final_dict)):
+        yield dict(final_dict[i])
 
 
-print(handler(json_messager()))
+a = handler(validator(json_messager()))
+print(type(a))
+print("Результат")
+for i in a:
+    print('')
+    print(i)
+    print(type(i))
