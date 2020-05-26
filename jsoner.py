@@ -254,8 +254,6 @@ def validator(json, schema: dict = SCHEMA) -> dict:
 def handler(json: dict) -> list:
     """Обработчик входящих JSON, возвращается список
     но хотелось бы n отедльных словарей с разными location и amount."""
-    print('Исходная JSON')
-    print(json)
     final_dict = []
     example_dict = []
 

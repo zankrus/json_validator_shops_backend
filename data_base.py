@@ -41,5 +41,3 @@ def update_bd():
     pass
 
 
-
-flake8                    MainProcess    462 DEBUG    Added a data_base.py logging handler to logger root at flake8
