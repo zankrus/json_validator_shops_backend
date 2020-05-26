@@ -2,6 +2,7 @@
 
 import psycopg2
 
+
 con = psycopg2.connect(
         database="postgres",
         user="postgres",
@@ -15,14 +16,14 @@ con = psycopg2.connect(
 def data_base_creating():
     cur = con.cursor()
 
-    cur.execute('''CREATE TABLE IF NOT EXISTS GOODS  
+    cur.execute('''CREATE TABLE IF NOT EXISTS GOODS
          (ID SERIAL  PRIMARY KEY NOT NULL ,
          NAME VARCHAR NOT NULL,
          PACKAGE_HEIGHT FLOAT NOT NULL,
          PACKAGE_WIDTH FLOAT NOT NULL);''')
 
 
-    cur.execute('''CREATE TABLE IF NOT EXISTS SHOPS_GOODS  
+    cur.execute('''CREATE TABLE IF NOT EXISTS SHOPS_GOODS
          (ID SERIAL  PRIMARY KEY NOT NULL ,
          ID_GOOD INT NOT NULL,
          LOCATION VARCHAR NOT NULL,
@@ -30,18 +31,55 @@ def data_base_creating():
          FOREIGN KEY (ID_GOOD)  REFERENCES GOODS (ID));''')
 
     con.commit()
-    con.close()
 
 
-def insert_bd(a: dict) -> None:
+
+def insert_goods(a: dict) -> None:
+    a = a
     cur = con.cursor()
-    cur.execute(
-        "INSERT INTO STUDENT (ADMISSION,NAME,AGE,COURSE,DEPARTMENT) VALUES (3420, 'John', 18, 'Computer Science', 'ICT')"
-    )
+    try:
+        cur.execute(
+            "INSERT INTO GOODS (ID,NAME,PACKAGE_HEIGHT,PACKAGE_WIDTH) VALUES (%s, %s, %s, %s);",
+            (a['id'], a['name'], a['height'], a['width'])
+        )
 
+        con.commit()
+    except psycopg2.errors.UniqueViolation:
+        cur.execute("ROLLBACK")
+        con.commit()
+        cur.execute(
+            "UPDATE GOODS SET NAME = %s ,PACKAGE_HEIGHT = %s, PACKAGE_WIDTH = %s WHERE ID = %s",
+            (a['name'], a['height'], a['width'], a['id'])
+        )
+        con.commit()
 
-
-def update_bd():
+def insert_shops_goods(a: dict) -> None:
+    b = select()
+    a = a
     cur = con.cursor()
+    print('')
+    print((a['id'],a['location']))
+    print("")
+    if (a['id'],a['location']) in b:
+        cur.execute(
+                "UPDATE SHOPS_GOODS SET AMOUTH = %s  WHERE LOCATION = %s AND ID_GOOD = %s",
+                (a['amount'], a['location'], a['id'])
+            )
+        con.commit()
+    else:
+        cur.execute(
+                    "INSERT INTO SHOPS_GOODS (ID,ID_GOOD,LOCATION,AMOUTH) VALUES (default,%s, %s, %s)", (a['id'], a['location'], a['amount'])
+                )
+        con.commit()
 
+def select():
+    cur = con.cursor()
+    cur.execute("SELECT  ID_GOOD,LOCATION from SHOPS_GOODS")
+    rows = cur.fetchall()
+    flag = []
 
+    for row in rows:
+        flag.append((row[0], row[1]))
+
+    print(flag)
+    return flag
