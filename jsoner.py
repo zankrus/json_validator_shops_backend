@@ -1,5 +1,9 @@
 """hello where """
-JSON_SCHEMA = {
+import jsonschema
+from jsonschema import validate
+import random
+
+SCHEMA = {
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "http://example.com/example.json",
     "type": "object",
@@ -162,4 +166,106 @@ JSON_SCHEMA = {
     }
 }
 
+goods_id_and_names = {1: "Телевизор", 2: 'Смартфон', 3: "Ноутбук", 4: "Собака"}
 
+random_int = random.randint(1, 4)
+
+jeson_valid = {
+    "id": random_int,
+    "name": goods_id_and_names[random_int],
+    "package_params": {
+        "width": random.randint(1, 10),
+        "height": random.randint(1, 10)
+    },
+    "location_and_quantity": [
+        {
+            "location": "Магазин на Ленина",
+            "amount": random.randint(0, 10)
+        },
+        {
+            "location": "Магазин в центре",
+            "amount": random.randint(0, 10)
+        }
+    ]
+}
+
+
+def json_messager():
+    random_event = random.randint(1, 1)
+    if random_event == 1:
+        jeson_valid = {
+            "id": random_int,
+            "name": goods_id_and_names[random_int],
+            "package_params": {
+                "width": random.randint(1, 10),
+                "height": random.randint(1, 10)
+            },
+            "location_and_quantity": [
+                {
+                    "location": "Магазин на Ленина",
+                    "amount": random.randint(0, 10)
+                },
+                {
+                    "location": "Магазин в центре",
+                    "amount": random.randint(0, 10)
+                }
+            ]
+        }
+        return jeson_valid
+    else:
+        jeson_invalid = {
+            "id": random_int,
+            "name": random_int,
+            "package_params": {
+                "width": random.randint(1, 10),
+                "height": random.randint(1, 10)
+            },
+            "location_and_quantity": [
+                {
+                    "location": "Магазин на Ленина",
+                    "amount": random.randint(0, 10)
+                },
+                {
+                    "location": "Магазин в центре",
+                    "amount": random.randint(0, 10)
+                }
+            ]
+        }
+        return jeson_invalid
+
+
+def validator(json, schema: dict = SCHEMA) -> dict:
+    try:
+        validate(json, schema)
+        print('Zbs Krasavchik')
+        return json
+    except jsonschema.exceptions.ValidationError:
+        print('Govno')
+
+
+
+
+def handler(json):
+    print(json)
+    example_dict = []
+    for key in json:
+        a = key, json[key]
+        if isinstance(json[key], dict):
+            for inner_key in json[key]:
+                b = inner_key, json[key][inner_key]
+                example_dict.append(b)
+
+        if isinstance(json[key], list):
+            for list_key in json[key]:
+                for inner_list_key in list_key:
+                        c = inner_list_key , list_key[inner_list_key]
+                        example_dict.append(c)
+
+        elif key != "package_params":
+            example_dict.append(a)
+
+
+    return example_dict
+
+
+print(handler(json_messager()))
