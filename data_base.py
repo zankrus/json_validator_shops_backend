@@ -2,17 +2,18 @@
 
 import psycopg2
 
-
-def data_base_creating():
-    con = psycopg2.connect(
+con = psycopg2.connect(
         database="postgres",
         user="postgres",
         password="221052",
         host="127.0.0.1",
         port="5432"
     )
-    cur = con.cursor()
 
+
+
+def data_base_creating():
+    cur = con.cursor()
 
     cur.execute('''CREATE TABLE IF NOT EXISTS GOODS  
          (ID SERIAL  PRIMARY KEY NOT NULL ,
@@ -32,12 +33,15 @@ def data_base_creating():
     con.close()
 
 
-def insert_bd():
-    pass
+def insert_bd(a: dict) -> None:
+    cur = con.cursor()
+    cur.execute(
+        "INSERT INTO STUDENT (ADMISSION,NAME,AGE,COURSE,DEPARTMENT) VALUES (3420, 'John', 18, 'Computer Science', 'ICT')"
+    )
 
 
 
 def update_bd():
-    pass
+    cur = con.cursor()
 
 

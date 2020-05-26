@@ -193,7 +193,7 @@ jeson_valid = {
 def json_messager() -> dict:
     """Тестовая функция для проверки поведения , если
     JSON невалидный"""
-    random_event = random.randint(1, 1)
+    random_event = random.randint(1, 2)
     if random_event == 1:
         jeson_valid = {
             "id": random_int,
@@ -256,14 +256,12 @@ def handler(json: dict) -> list:
     но хотелось бы n отедльных словарей с разными location и amount."""
     final_dict = []
     example_dict = []
-
     for key in json:
         a = key, json[key]
         if isinstance(json[key], dict):
             for inner_key in json[key]:
                 b = inner_key, json[key][inner_key]
                 example_dict.append(b)
-
         if isinstance(json[key], list):
             for list_key in json[key]:
                 counter = 0
@@ -274,10 +272,8 @@ def handler(json: dict) -> list:
                     counter += 1
                     if counter % 2 == 0:
                         final_dict.append(d)
-
         elif key != "package_params":
             example_dict.append(a)
-
     for i in range(len(final_dict)):
         yield dict(final_dict[i])
 
