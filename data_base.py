@@ -1,4 +1,4 @@
-"""Этот файл отвечает за работу БД. Используемая БД - Postgres."""
+"""Файл для работы с БД"""
 import psycopg2
 
 con = psycopg2.connect(
@@ -71,7 +71,7 @@ def insert_shops_goods(a: dict) -> None:
 
 
 def select() -> list:
-    """Вспомоготельная функция , нужная для проверки  вставленных значений в SHOPS_GOODS.radon mi -m ."""
+    """Вспомоготельная функция , нужная для проверки  вставленных значений в SHOPS_GOODS."""
     cur = con.cursor()
     cur.execute("SELECT  ID_GOOD,LOCATION from SHOPS_GOODS")
     rows = cur.fetchall()
