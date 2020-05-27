@@ -2,7 +2,7 @@
 import jsonschema
 from jsonschema import validate
 import random
-
+import json
 
 
 SCHEMA = {
@@ -176,7 +176,7 @@ goods_id_and_names = {1: "Телевизор", 2: 'Смартфон', 3: "Ноу
 def json_messager() -> dict:
     """Тестовая функция для проверки поведения , если
     JSON невалидный"""
-    random_event = random.randint(1, 4)
+    random_event = random.randint(2, 4)
     if random_event > 1:
         jeson_valid = {
             "id": random.randint(1, 4),
@@ -261,5 +261,12 @@ def handler(json: dict) -> list:
         for i in range(len(final_dict)):
             yield dict(final_dict[i])
 
+
+def file_jsoner(json_messager):
+    with open ('test.json' , 'w') as j:
+        json.dump(json_messager, j,ensure_ascii=False)
+    with open ('test.json') as j:
+        a = json.loads(j.read())
+        return a
 
 

@@ -1,9 +1,10 @@
-from homework.data_base import data_base_creating, insert_goods , insert_shops_goods
-from homework.jsoner import validator, json_messager, handler
+from data_base import data_base_creating, insert_goods , insert_shops_goods
+from jsoner import validator, json_messager, handler, file_jsoner
 
 if __name__ == '__main__':
+    file_json = file_jsoner(json_messager())
     data_base_creating()
-    jsonka = validator(json_messager())
+    jsonka = validator(file_json)
     print('Поступившая JSON: ')
     print(jsonka)
     print('')
@@ -11,7 +12,7 @@ if __name__ == '__main__':
     zapros = handler(jsonka)
 
     for element in zapros:
-        print(element)
+
         insert_goods(element)
         insert_shops_goods(element)
 
