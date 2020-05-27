@@ -1,9 +1,9 @@
-"""hello where """
+"""Файл для работы с JSON, тут хранится схема , функции."""
+
 import jsonschema
 from jsonschema import validate
 import random
 import json
-
 
 SCHEMA = {
     "$schema": "http://json-schema.org/draft-07/schema",
@@ -171,11 +171,8 @@ SCHEMA = {
 goods_id_and_names = {1: "Телевизор", 2: 'Смартфон', 3: "Ноутбук", 4: "Собака"}
 
 
-
-
 def json_messager() -> dict:
-    """Тестовая функция для проверки поведения , если
-    JSON невалидный"""
+    """Тестовая функция-генерирует тестовые JSON, как валидный так и нет."""
     random_event = random.randint(2, 4)
     if random_event > 1:
         jeson_valid = {
@@ -223,7 +220,7 @@ def json_messager() -> dict:
         return jeson_invalid
 
 
-def validator(json, schema: dict = SCHEMA) -> [str, dict]:
+def validator(json: dict, schema: dict = SCHEMA) -> any:
     """Валидатор JSON."""
     try:
         validate(json, schema)
@@ -232,9 +229,8 @@ def validator(json, schema: dict = SCHEMA) -> [str, dict]:
         return 'Невалидный json'
 
 
-def handler(json: dict) -> list:
-    """Обработчик входящих JSON, возвращается список
-    но хотелось бы n отедльных словарей с разными location и amount."""
+def handler(json: dict) -> Generator[dict] :
+    """Обработчик входящих JSON, возвращается генератор словарей из входящей JSON."""
     final_dict = []
     example_dict = []
     for key in json:
@@ -262,11 +258,10 @@ def handler(json: dict) -> list:
             yield dict(final_dict[i])
 
 
-def file_jsoner(json_messager):
-    with open ('test.json' , 'w') as j:
-        json.dump(json_messager, j,ensure_ascii=False)
-    with open ('test.json') as j:
+def file_jsoner(incom_json: dict) -> dict:
+    """Функция создания файла с JSON."""
+    with open('test.json', 'w') as j:
+        json.dump(incom_json, j, ensure_ascii=False)
+    with open('test.json') as j:
         a = json.loads(j.read())
         return a
-
-
