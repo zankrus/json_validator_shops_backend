@@ -1,5 +1,5 @@
 """Файл для работы с JSON, тут хранится схема , функции."""
-from typing import Generator
+from typing import Generator, Any
 
 import jsonschema
 from jsonschema import validate
@@ -221,7 +221,7 @@ def json_messager() -> dict:
         return jeson_invalid
 
 
-def validator(json: dict, schema: dict = SCHEMA) -> [dict, str]:
+def validator(json: dict, schema: dict = SCHEMA) -> Any:
     """Валидатор JSON."""
     try:
         validate(json, schema)
