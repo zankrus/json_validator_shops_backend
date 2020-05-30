@@ -170,15 +170,15 @@ SCHEMA = {
 }
 
 goods_id_and_names = {1: "Телевизор", 2: 'Смартфон', 3: "Ноутбук", 4: "Собака"}
-
+rand = random.randint(1, 4)
 
 def json_messager() -> dict:
     """Тестовая функция-генерирует тестовые JSON, как валидный так и нет."""
-    random_event = random.randint(2, 4)
+    random_event = random.randint(1, 4)
     if random_event > 1:
         jeson_valid = {
-            "id": random.randint(1, 4),
-            "name": goods_id_and_names[random.randint(1, 4)],
+            "id": rand,
+            "name": goods_id_and_names[rand],
             "package_params": {
                 "width": random.randint(1, 10),
                 "height": random.randint(1, 10)
